@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Тестування продуктивності з ШІ</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="screen active" id="screen-main-menu">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title">Тестування продуктивності з ШІ</h1>
+      <div class="btn-list">
+        <button class="btn btn-icon" onclick="showScreen('screen-choose-target')">
+          <img src="assets/icons/generate.svg" alt="Generate script icon" />
+          Згенерувати і запустити тест
+        </button>
+        <button class="btn btn-icon" onclick="loadSavedScriptsList()">
+          <img src="assets/icons/run.svg" alt="Run script icon" />
+          Запустити збережений тест
+        </button>
+        <button class="btn btn-icon" onclick="loadSavedResultsList()">
+          <img src="assets/icons/analyze.svg" alt="Analyze script icon" />
+          Аналізувати збережений тест
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-target">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть об'єкт тестування</h1>
+      <div class="btn-list">
+        <button class="btn" onclick="showScreen('screen-choose-endpoint')">Кінцева точка (Endpoint)</button>
+        <button class="btn" onclick="showScreen('screen-choose-flow')">Сценарій користувача (User Flow)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-endpoint">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть одну з доступних<br>кінцевих точок</h1>
+      <div class="btn-grid" id="endpoint-list" style="max-width: 940px; width: 100%;"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-flow">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть один з доступних<br>сценаріїв користувача</h1>
+      <div class="btn-list" id="scenario-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-test-type">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть тип тестування<br>продуктивності</h1>
+      <div class="btn-list" id="test-type-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-load-setup">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть спосіб налаштування<br>навантаження</h1>
+      <div class="btn-list" id="load-setup-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-manual-params">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <div class="manual-form">
+        <div class="form-field">
+          <label for="manual-vu">Введіть кількість віртуальних користувачів (VU)</label>
+          <input type="number" id="manual-vu" placeholder="напр., 100" />
+        </div>
+        <div class="form-field">
+          <label for="manual-duration">Введіть тривалість тестування (Duration)</label>
+          <input type="text" id="manual-duration" placeholder="напр., 10m" />
+        </div>
+        <div class="form-field">
+          <label for="manual-ramp-up">Введіть час нарощування навантаження (Ramp up)</label>
+          <input type="text" id="manual-ramp-up" placeholder="напр., 30s" />
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="saveManualParams()">Зберегти та продовжити</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-params-model">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть модель штучного<br>інтелекту для генерації<br>параметрів</h1>
+      <div class="btn-list" id="params-model-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-generating-params">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title">ШІ генерує параметри<br>навантаження...<br>Будь ласка, зачекайте</h1>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-show-params">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <div class="two-col">
+        <div class="two-col-left">
+          <p class="question-title" id="params-label"></p>
+          <div class="config-card" style="margin-top: 16px;">
+            <pre id="params-content"></pre>
+          </div>
+        </div>
+        <div class="two-col-right">
+          <p class="question-title">Бажаєте залишити<br>згенеровані параметри<br>навантаження?</p>
+          <div class="btn-list">
+            <button class="btn" onclick="acceptGeneratedParams()">Так</button>
+            <button class="btn" onclick="regenerateParams()">Згенерувати ще раз</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-model">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть модель штучного<br>інтелекту</h1>
+      <div class="btn-list" id="model-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-tools">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть інструменти тестування<br>продуктивності (можна декілька)</h1>
+      <div class="btn-list" id="tool-list"></div>
+      <button class="btn btn-primary" onclick="confirmTools()">OK</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-confirm-config">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <div class="two-col">
+        <div class="two-col-left">
+          <div class="config-card">
+            <strong>Обрана конфігурація</strong>
+            <pre id="config-summary"></pre>
+          </div>
+        </div>
+        <div class="two-col-right">
+          <p class="question-title">Бажаєте згенерувати тестовий сценарій(ї) з цією конфігурацією?</p>
+          <div class="btn-list">
+            <button class="btn" onclick="startGeneration()">Так</button>
+            <button class="btn" onclick="startEditing()">Ні</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-change-settings">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Змінити налаштування:</h1>
+      <div class="btn-list">
+        <button class="btn" onclick="showScreen('screen-choose-tools')">Інструмент тестування</button>
+        <button class="btn" onclick="showScreen('screen-choose-model')">Модель ШІ</button>
+        <button class="btn" onclick="showScreen('screen-choose-load-setup')">Параметри навантаження</button>
+        <button class="btn" onclick="showScreen('screen-choose-test-type')">Тип тестування</button>
+        <button class="btn btn-primary" onclick="showScreen('screen-main-menu')">Повернутися до головного меню</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-generating">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title">ШІ генерує тестовий сценарій...<br>Будь ласка, зачекайте</h1>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-show-script">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <div class="two-col">
+        <div class="two-col-left">
+          <p class="question-title" id="script-label">Згенерований скрипт для<br>інструмента ... за допомогою моделі ...:</p>
+          <div class="config-card" style="margin-top: 16px;">
+            <pre id="script-content"></pre>
+          </div>
+        </div>
+        <div class="two-col-right">
+          <p class="question-title">Бажаєте зберегти<br>згенерований скрипт?</p>
+          <div class="btn-list">
+            <button class="btn" onclick="saveCurrentScript()">Так</button>
+            <button class="btn" onclick="showScreen('screen-script-not-saved')">Ні</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-script-not-saved">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Скрипт не було збережено</h1>
+      <div class="btn-list">
+        <button class="btn" onclick="startGeneration()">Згенерувати ще раз</button>
+        <button class="btn" onclick="startEditing()">Змінити налаштування</button>
+        <button class="btn btn-primary" onclick="showScreen('screen-main-menu')">Повернутися до головного меню</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-script-saved">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium" style="text-align:center;">Тестовий скрипт збережено.<br>Бажаєте запустити його?</h1>
+      <div class="btn-list">
+        <button class="btn" onclick="startTestRun()">Так</button>
+        <button class="btn btn-primary" onclick="showScreen('screen-main-menu')">Повернутися до головного меню</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-test-running">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title">
+        Тестовий сценарій <span id="running-target-name">...</span> виконується...<br>
+        Будь ласка, зачекайте
+      </h1>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-test-completed">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium" id="test-completed-title"></h1>
+
+      <div class="two-col">
+        <div class="two-col-left">
+          <div class="config-card">
+            <strong>Зведені метрики</strong>
+            <pre id="metrics-summary"></pre>
+          </div>
+        </div>
+
+        <div class="two-col-right">
+          <p class="question-title">Бажаєте зберегти<br>результати тестування?</p>
+          <div class="btn-list">
+            <button class="btn" onclick="saveTestResults()">Так</button>
+            <button class="btn" onclick="discardTestResults()">Ні</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-results-not-saved">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Результати тестування<br>не було збережено</h1>
+      <div class="btn-list">
+        <button class="btn" onclick="startTestRun()">Запустити тест ще раз</button>
+        <button class="btn btn-primary" onclick="showScreen('screen-main-menu')">Повернутися до головного меню</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-results-saved">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Результати тестування<br>збережено</h1>
+      <div class="btn-list">
+        <button class="btn" onclick="showScreen('screen-choose-analyst-model')">Виконати аналіз з допомогою ШІ</button>
+        <button class="btn btn-primary" onclick="showScreen('screen-main-menu')">Повернутися до головного меню</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-analyst-model">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть модель штучного<br>інтелекту для аналізу</h1>
+      <div class="btn-list" id="analyst-model-list"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-analyzing">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title">ШІ аналізує результати<br>тестування...<br>Будь ласка, зачекайте</h1>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-show-analysis">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <div class="two-col">
+        <div class="two-col-left">
+          <p class="question-title" id="analysis-label"></p>
+          <div class="config-card" style="margin-top: 16px;">
+            <pre id="analysis-content"></pre>
+          </div>
+        </div>
+        <div class="two-col-right">
+          <p class="question-title">Бажаєте зберегти<br>отриманий аналіз?</p>
+          <div class="btn-list">
+            <button class="btn" onclick="saveAnalysis()">Так</button>
+            <button class="btn" onclick="discardAnalysis()">Ні</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-analysis-saved">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Аналіз результатів збережено</h1>
+      <div class="btn-list">
+        <button class="btn btn-primary" onclick="showScreen('screen-main-menu')">Повернутися до головного меню</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-analysis-not-saved">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Аналіз результатів не було<br>збережено</h1>
+      <div class="btn-list">
+        <button class="btn" onclick="regenerateAnalysis()">Згенерувати ще раз</button>
+        <button class="btn btn-primary" onclick="showScreen('screen-main-menu')">Повернутися до головного меню</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-saved-script">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть тестовий сценарій<br>зі списку</h1>
+      <div class="saved-scripts-box" id="saved-scripts-list"></div>
+      <button class="btn btn-primary" onclick="confirmSavedScriptSelection()">ОК</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-saved-config">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <div class="two-col">
+        <div class="two-col-left">
+          <div class="config-card">
+            <strong>Конфігурація тесту</strong>
+            <pre id="saved-config-summary"></pre>
+          </div>
+        </div>
+        <div class="two-col-right">
+          <p class="question-title">Бажаєте запустити тест з<br>цими параметрами<br>навантаження?</p>
+          <div class="btn-list">
+            <button class="btn" onclick="startTestRun()">Запустити</button>
+            <button class="btn btn-primary" onclick="showScreen('screen-choose-saved-script')">Назад</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-choose-saved-result">
+    <img src="assets/background.svg" class="screen-bg" alt="Background" />
+    <div class="screen-content">
+      <h1 class="title title-medium">Оберіть результати тестування<br>для аналізу зі списку</h1>
+      <div class="saved-scripts-box" id="saved-results-list"></div>
+      <button class="btn btn-primary" onclick="confirmSavedResultSelection()">ОК</button>
+    </div>
+  </div>
+
+  <div id="error-popup" class="error-popup hidden">
+    <div class="error-popup-content">
+      <p id="error-popup-text"></p>
+      <button type="button" onclick="hideErrorPopup()">OK</button>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

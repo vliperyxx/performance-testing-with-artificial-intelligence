@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+instance/
+*.log
+logs/
+results/
+reports/
+generated_scripts/

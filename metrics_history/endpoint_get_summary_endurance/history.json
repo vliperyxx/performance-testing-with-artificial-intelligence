@@ -1,0 +1,157 @@
+[
+  {
+    "timestamp": "2026-05-16T18:59:17",
+    "tool": "gatling",
+    "provider": "gemini",
+    "target_type": "endpoint",
+    "target_name": "get_summary",
+    "test_type": "endurance",
+    "load_parameters": {
+      "virtual_users": 15,
+      "duration": "3m",
+      "ramp_up": "30s"
+    },
+    "metrics": {
+      "aggregated": {
+        "total_requests": 2868,
+        "failed_requests": 0,
+        "error_rate_percent": 0.0,
+        "throughput_rps": 13.72,
+        "response_time": {
+          "avg_ms": 14,
+          "min_ms": 12,
+          "max_ms": 61,
+          "median_ms": 14,
+          "p90_ms": 15,
+          "p95_ms": 16,
+          "p99_ms": 18
+        }
+      }
+    },
+    "result_folder": "C:\\Users\\vlady\\Desktop\\diploma\\ai-performance-testing\\results\\gemini\\gatling\\endpoint_get_summary_endurance_20260516_185537"
+  },
+  {
+    "timestamp": "2026-05-16T19:04:01",
+    "tool": "gatling",
+    "provider": "gemini",
+    "target_type": "endpoint",
+    "target_name": "get_summary",
+    "test_type": "endurance",
+    "load_parameters": {
+      "virtual_users": 15,
+      "duration": "3m",
+      "ramp_up": "30s"
+    },
+    "metrics": {
+      "aggregated": {
+        "total_requests": 2869,
+        "failed_requests": 0,
+        "error_rate_percent": 0.0,
+        "throughput_rps": 13.73,
+        "response_time": {
+          "avg_ms": 14,
+          "min_ms": 12,
+          "max_ms": 52,
+          "median_ms": 14,
+          "p90_ms": 15,
+          "p95_ms": 15,
+          "p99_ms": 18
+        }
+      }
+    },
+    "result_folder": "C:\\Users\\vlady\\Desktop\\diploma\\ai-performance-testing\\results\\gemini\\gatling\\endpoint_get_summary_endurance_20260516_190023"
+  },
+  {
+    "timestamp": "2026-05-16T19:12:17",
+    "tool": "gatling",
+    "provider": "gemini",
+    "target_type": "endpoint",
+    "target_name": "get_summary",
+    "test_type": "endurance",
+    "load_parameters": {
+      "virtual_users": 15,
+      "duration": "3m",
+      "ramp_up": "30s"
+    },
+    "metrics": {
+      "aggregated": {
+        "total_requests": 2865,
+        "failed_requests": 0,
+        "error_rate_percent": 0.0,
+        "throughput_rps": 13.71,
+        "response_time": {
+          "avg_ms": 13,
+          "min_ms": 11,
+          "max_ms": 53,
+          "median_ms": 13,
+          "p90_ms": 14,
+          "p95_ms": 15,
+          "p99_ms": 17
+        }
+      }
+    },
+    "result_folder": "C:\\Users\\vlady\\Desktop\\diploma\\ai-performance-testing\\results\\gemini\\gatling\\endpoint_get_summary_endurance_20260516_190832"
+  },
+  {
+    "timestamp": "2026-05-16T19:16:36",
+    "tool": "gatling",
+    "provider": "gemini",
+    "target_type": "endpoint",
+    "target_name": "get_summary",
+    "test_type": "endurance",
+    "load_parameters": {
+      "virtual_users": 15,
+      "duration": "3m",
+      "ramp_up": "30s"
+    },
+    "metrics": {
+      "aggregated": {
+        "total_requests": 2868,
+        "failed_requests": 0,
+        "error_rate_percent": 0.0,
+        "throughput_rps": 13.72,
+        "response_time": {
+          "avg_ms": 13,
+          "min_ms": 11,
+          "max_ms": 168,
+          "median_ms": 13,
+          "p90_ms": 14,
+          "p95_ms": 16,
+          "p99_ms": 28
+        }
+      }
+    },
+    "result_folder": "C:\\Users\\vlady\\Desktop\\diploma\\ai-performance-testing\\results\\gemini\\gatling\\endpoint_get_summary_endurance_20260516_191246"
+  },
+  {
+    "timestamp": "2026-05-16T19:20:25",
+    "tool": "gatling",
+    "provider": "gemini",
+    "target_type": "endpoint",
+    "target_name": "get_summary",
+    "test_type": "endurance",
+    "load_parameters": {
+      "virtual_users": 15,
+      "duration": "3m",
+      "ramp_up": "30s"
+    },
+    "metrics": {
+      "aggregated": {
+        "total_requests": 2865,
+        "failed_requests": 0,
+        "error_rate_percent": 0.0,
+        "throughput_rps": 13.71,
+        "response_time": {
+          "avg_ms": 15,
+          "min_ms": 11,
+          "max_ms": 76,
+          "median_ms": 15,
+          "p90_ms": 17,
+          "p95_ms": 19,
+          "p99_ms": 37
+        }
+      }
+    },
+    "result_folder": "C:\\Users\\vlady\\Desktop\\diploma\\ai-performance-testing\\results\\gemini\\gatling\\endpoint_get_summary_endurance_20260516_191642"
+  }
+]
